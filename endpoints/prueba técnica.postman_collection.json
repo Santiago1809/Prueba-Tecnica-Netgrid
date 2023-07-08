@@ -1,0 +1,248 @@
+{
+	"info": {
+		"_postman_id": "5b1f3674-acbd-4cad-bcd4-93e674c45bf7",
+		"name": "prueba técnica",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25364678"
+	},
+	"item": [
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "Registro",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "YiCika72r5LQZWAUEPeR9VDFMLLP0Bpp1AvQCMdC",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Usuario prueba\",\r\n    \"email\": \"prueba@gmail.com\",\r\n    \"password\":\"pruebaregistro2\"\r\n}"
+						},
+						"url": "http://localhost:8000/api/users/register"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "4stu37SVFxcCbRS9g9q2NzrppyqXau3CTFRufVWC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"aristizabalsantiago482@gmail.com\",\r\n    \"password\":\"Santiago2\"\r\n}"
+						},
+						"url": "http://localhost:8000/api/users"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Grupos",
+			"item": [
+				{
+					"name": "Crear proyecto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "bO8sh23dICyChqgjBVFOXk7SNFNQnja2KVE4N0fB",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idUsuario\":1,\r\n    \"titulo\":\"Mi segundo proyecto\",\r\n    \"descripcion\": \"Prueba de verificación de token csrf\",\r\n    \"fecha_inicio\":\"2023-07-06\",\r\n    \"fecha_fin\":\"2023-07-06\"\r\n}"
+						},
+						"url": "http://localhost:8000/api/proyectos"
+					},
+					"response": []
+				},
+				{
+					"name": "obtener proyectos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://localhost:8000/api/v1/project/1"
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar proyecto",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "bO8sh23dICyChqgjBVFOXk7SNFNQnja2KVE4N0fB",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\":\"A continuación rectificaremos si solo se llenan los campos enviados\"\r\n}"
+						},
+						"url": "http://localhost:8000/api/proyectos/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar proyecto",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "bO8sh23dICyChqgjBVFOXk7SNFNQnja2KVE4N0fB",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:8000/api/proyectos/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener proyecto especifico",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8000/api/proyectos/proyecto/3"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tareas",
+			"item": [
+				{
+					"name": "Crear tareas",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "bO8sh23dICyChqgjBVFOXk7SNFNQnja2KVE4N0fB",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idProyecto\":3,\r\n    \"titulo\":\"Mi segunda tarea\",\r\n    \"descripcion\":\"Esta es para verificar la creación de tareas, además para posteriormente ser eliminado\",\r\n    \"estado\":\"pendiente\"\r\n}"
+						},
+						"url": "http://localhost:8000/api/tareas"
+					},
+					"response": []
+				},
+				{
+					"name": "obtener tareas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8000/api/tareas/3"
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar tareas",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "bO8sh23dICyChqgjBVFOXk7SNFNQnja2KVE4N0fB",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\":\"Prueba de actualización\"\r\n}"
+						},
+						"url": "http://localhost:8000/api/tareas/3"
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar una tarea",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "bO8sh23dICyChqgjBVFOXk7SNFNQnja2KVE4N0fB",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://localhost:8000/api/tareas/4"
+					},
+					"response": []
+				},
+				{
+					"name": "obtener tarea específica",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8000/api/tareas/tarea/3"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
