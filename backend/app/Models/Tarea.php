@@ -13,6 +13,7 @@ class Tarea extends Model
         'titulo',
         'descripcion',
         'prioridad',
-        'estado'
+        'estado',
+        'responsable'
     ];
 }

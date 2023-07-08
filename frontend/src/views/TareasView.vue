@@ -80,9 +80,10 @@
                 :nombreTarea="tarea.titulo"
                 :descripcionTarea="tarea.descripcion"
                 :estado="tarea.estado"
+                :responsable="tarea.responsable"
               />
             </div>
-            <CardInput @tarea-agregado="agregarTarea" />
+            <CardInput @tarea-agregado="agregarTarea" v-show="show" />
           </div>
         </div>
       </div>
@@ -105,12 +106,17 @@ export default {
       filtroDescripcion: "",
       filtroEstado: "",
       showDropdown: false,
+      show: true,
     };
   },
   mounted() {
     this.getGroup();
     this.getTasks();
     document.title = "Tareas";
+    let user = JSON.parse(localStorage.getItem("usuario"));
+    if (user.rol !== "administrador") {
+      this.show = false;
+    }
   },
   components: {
     LogOutButtonComponent,
@@ -119,17 +125,30 @@ export default {
   },
   methods: {
     getTasks() {
+      const user = JSON.parse(localStorage.getItem("usuario"));
       fetch(`http://localhost:8000/api/tareas/${this.$route.params.id}`)
         .then((response) => response.json())
         .then((data) => {
           data.tareas.map((item) => {
-            this.tareas.push({
-              idProyecto: item.idProyecto,
-              id: item.id,
-              titulo: item.titulo,
-              descripcion: item.descripcion,
-              estado: item.estado,
-            });
+            if (user.rol == "usuario" && item.responsable == user.id) {
+              this.tareas.push({
+                idProyecto: item.idProyecto,
+                id: item.id,
+                titulo: item.titulo,
+                descripcion: item.descripcion,
+                estado: item.estado,
+                responsable: item.responsable,
+              });
+            } else if (user.rol == "administrador") {
+              this.tareas.push({
+                idProyecto: item.idProyecto,
+                id: item.id,
+                titulo: item.titulo,
+                descripcion: item.descripcion,
+                estado: item.estado,
+                responsable: item.responsable,
+              });
+            }
           });
         });
     },

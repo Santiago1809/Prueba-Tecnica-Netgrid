@@ -28,7 +28,9 @@
           :id_tarea="id_tarea"
           :tituloTarea="nombreTarea"
           :descripcionTarea="descripcionTarea"
+          :responsable="responsable"
           color="red"
+          v-show="show"
         />
       </div>
     </div>
@@ -38,15 +40,28 @@
 import ModalComponent from '../ModalComponent.vue';
 export default {
   name: "TaskCard",
+  data(){
+    return {
+      show: true
+    }
+  },
   props: {
     id_tarea: Number,
     id_grupo: Number,
     nombreTarea: String,
     descripcionTarea: String,
-    estado: String
+    estado: String,
+    responsable: Number
+
   },
   components: {
     ModalComponent,
   },
+  mounted(){
+    let user = JSON.parse(localStorage.getItem('usuario'))
+    if(user.rol!=='administrador'){
+      this.show = false
+    }
+  }
 };
 </script>

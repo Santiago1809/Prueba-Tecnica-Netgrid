@@ -26,6 +26,7 @@ Route::get('tareas/tarea/{id}', [TareaController::class,'show']);
 Route::post('tareas', [TareaController::class,'store']);
 Route::put('tareas/{id}', [TareaController::class, 'update']);
 Route::delete('tareas/{id}', [TareaController::class, 'destroy']);
+Route::get('users', [UserController::class, 'index']);
 Route::post('users', [UserController::class, 'login']);
 Route::post('users/register', [UserController::class, 'store']);
 

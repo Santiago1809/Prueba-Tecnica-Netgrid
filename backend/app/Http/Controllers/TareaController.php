@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Proyecto;
 use App\Models\Tarea;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TareaController extends Controller
@@ -42,12 +43,20 @@ class TareaController extends Controller
                 'titulo' => 'required|string',
                 'descripcion' => 'required|string',
                 'estado' => 'required|string',
+                'responsable' => 'required|integer',
             ]);
+            $user = User::findOrFail($request->idUsuario);
+            if ($user->rol !== 'administrador') {
+                return response()->json([
+                    'message' => 'No tienes permiso para crear una tarea'
+                ], 403);
+            }
             Tarea::create([
                 'idProyecto' => $request->idProyecto,
                 'titulo' => $request->titulo,
                 'descripcion' => $request->descripcion,
-                'estado' => $request->estado
+                'estado' => $request->estado,
+                'responsable' => $request->responsable,
             ]);
             /* El código `return response()->json(['message' => 'Tarea creada correctamente'], 201);`
             está devolviendo una respuesta JSON con un mensaje de éxito y un código de estado de 201
@@ -92,14 +101,18 @@ class TareaController extends Controller
                 'titulo' => 'sometimes|string',
                 'descripcion' => 'sometimes|string',
                 'estado' => 'sometimes|string',
+                'responsable'=>'sometimes|integer',
             ]);
             $tarea = Tarea::findOrFail($id);
 
             $data = [
                 'titulo' => $request->titulo ?? $tarea->titulo,
                 'descripcion' => $request->descripcion ?? $tarea->descripcion,
-                'estado' => $request->estado ?? $tarea->estado,
-            ];
+                'estado' => $request->estado !== 'vacio' ? $request->estado : $tarea->estado,
+                'responsable' => isset($request->responsable) && $request->responsable !== 0 ? $request->responsable : $tarea->responsable,
+            ];            
+            
+            
             $tarea->update($data);
             return response()->json([
                 'message' => 'Tarea actualizada correctamente'
@@ -114,9 +127,15 @@ class TareaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(int $id, Request $request)
     {
         try {
+            $user = User::findOrFail($request->idUsuario);
+            if ($user->rol!== 'administrador') {
+                return response()->json([
+                   'message' => 'No tienes permiso para eliminar una tarea'
+                ], 403);
+            }
             $tarea = Tarea::findOrFail($id);
             $tarea->delete();
             return response()->json([

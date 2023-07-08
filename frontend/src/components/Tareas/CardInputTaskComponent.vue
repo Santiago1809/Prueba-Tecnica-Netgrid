@@ -19,10 +19,16 @@
         v-model="descripcion"
         required
       />
-      <select name="estado" id="estado" v-model="estado" class="text-center">
+      <select name="estado" id="estado" v-model="estado" class="text-center mb-8" required>
         <option value="" disabled selected hidden>Seleccionar estado</option>
         <option v-for="(state, index) in estados" :key="index" :value="state">
           {{ state }}
+        </option>
+      </select>
+      <select name="responsable" id="responsable" v-model="usuario" class="text-center mb-4" required>
+        <option value="" disabled selected hidden>Seleccionar responsable</option>
+        <option v-for="(user, index) in usuarios" :value="user.id" :key="index">
+          {{ user.name }}
         </option>
       </select>
 
@@ -44,18 +50,23 @@ export default {
       descripcion: "",
       estado: "",
       estados: ["pendiente", "en progreso", "completada"],
+      usuario: '',
+      usuarios: []
     };
   },
   methods: {
     add_task(e) {
+      let user_fetch = JSON.parse(localStorage.getItem('usuario'))
       e.preventDefault();
       fetch(`http://localhost:8000/api/tareas`, {
         method: "POST",
         body: JSON.stringify({
+          idUsuario: user_fetch.id,
           titulo: this.titulo,
           descripcion: this.descripcion,
           idProyecto: this.$route.params.id,
           estado: this.estado,
+          responsable: this.usuario
         }),
         headers: { "Content-Type": "application/json" },
       })
@@ -67,6 +78,21 @@ export default {
           this.descripcion = "";
         });
     },
+    get_Users() {
+      fetch('http://localhost:8000/api/users')
+      .then(response=>response.json())
+      .then((data)=>{
+        data.map((user)=>{
+          if(user.rol=='usuario'){
+            this.usuarios.push({id: user.id, name: user.name});
+          }
+        })
+      })
+    }
   },
+  mounted() {
+      this.get_Users();
+      
+    },
 };
 </script>

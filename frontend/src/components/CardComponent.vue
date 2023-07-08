@@ -32,6 +32,7 @@
           :id="id"
           :nombreGrupo="nombreGrupo"
           color="red"
+          v-show="show"
         />
       </div>
     </div>
@@ -43,6 +44,11 @@ import ModalComponent from "./ModalComponent.vue";
 
 export default {
   name: "IndexCardComponent",
+  data() {
+    return {
+      show: true,
+    }
+  },
   props: {
     nombreGrupo: String,
     ruta: String,
@@ -67,6 +73,11 @@ export default {
       return fechaActual.toLocaleDateString(undefined, options);
     },
   },
-  mounted() {},
+  mounted() {
+    let user = JSON.parse(localStorage.getItem('usuario'))
+    if(user.rol!=='administrador'){
+      this.show = false
+    }
+  },
 };
 </script>

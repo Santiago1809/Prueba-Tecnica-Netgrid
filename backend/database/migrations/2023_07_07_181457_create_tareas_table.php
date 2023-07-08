@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('descripcion');
             $table->enum('estado', ['pendiente','en progreso', 'completada']);
             $table->bigInteger('idProyecto')->unsigned();
+            $table->bigInteger('responsable')->unsigned();
             $table->foreign('idProyecto')->references('id')->on('proyectos')->onDelete('cascade');
+            $table->foreign('responsable')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

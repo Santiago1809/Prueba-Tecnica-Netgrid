@@ -55,6 +55,7 @@
                 @input="fecha_fin = $event.target.value"
                 :min="getCurrentDateTime()"
               />
+
               <div
                 class="bg-gray-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
               >
@@ -166,7 +167,24 @@
                   :key="index"
                   :value="estado"
                 >
-                  {{estado }}
+                  {{ estado }}
+                </option>
+              </select>
+              <select
+                name=""
+                v-show="show"
+                id=""
+                v-model="nuevo_responsable"
+                :value="responsable"
+                class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              >
+                <option value="" disabled selected>Responsable</option>
+                <option
+                  :value="user.id"
+                  v-for="(user, index) in usuarios"
+                  :key="index"
+                >
+                  {{ user.name }}
                 </option>
               </select>
               <div
@@ -254,15 +272,18 @@ export default {
       isModalOpen: false,
       grupos: [],
       grupoNuevo: this.id,
-      nuevoEstado: '',
-      estados: ['pendiente', 'en progreso', 'completada'],
-      estado: ''
+      nuevoEstado: "",
+      estados: ["pendiente", "en progreso", "completada"],
+      estado: 'vacio',
+      nuevo_responsable: 0,
+      usuarios: [],
+      show: true,
     };
   },
   methods: {
     openModal() {
       this.isModalOpen = true;
-      this.getGroups();
+      this.get_Users();
     },
     closeModal() {
       this.isModalOpen = false;
@@ -286,7 +307,7 @@ export default {
     },
     eliminarGrupo() {
       fetch(`http://localhost:8000/api/proyectos/${this.id}`, {
-        method: "DELETE"
+        method: "DELETE",
       })
         .then((response) => response.json())
         .then(() => {
@@ -295,32 +316,25 @@ export default {
         });
     },
     actualizarTarea() {
-      fetch(`http://localhost:8000/api/tareas/${this.id_tarea}`, {
+      const requestBody = {
+        titulo: this.tituloTarea,
+        descripcion: this.descripcionTarea,
+        estado: this.estado,
+        responsable: this.nuevo_responsable,
+      };
+
+      const apiUrl = `http://localhost:8000/api/tareas/${this.id_tarea}`;
+
+      fetch(apiUrl, {
         method: "PUT",
-        body: JSON.stringify({
-          titulo: this.tituloTarea,
-          descripcion: this.descripcionTarea,
-          estado: this.estado
-        }),
+        body: JSON.stringify(requestBody),
         headers: { "Content-Type": "application/json" },
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(this.estado)
+          console.log(data);
           this.openModal = false;
           window.location.reload();
-        });
-    },
-    getGroups() {
-      fetch(
-        `http://localhost:8000/api/proyectos/${localStorage.getItem("usuario")}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          data.map((grupo) =>{
-            console.log(grupo)
-            this.grupos.push({ id_grupo: grupo.id_grupo, nombre: grupo.nombre })
-          });
         });
     },
     eliminarTarea() {
@@ -345,6 +359,17 @@ export default {
     formatDateTime(datetime) {
       return new Date(datetime).toISOString().slice(0, 16);
     },
+    get_Users() {
+      fetch("http://localhost:8000/api/users")
+        .then((response) => response.json())
+        .then((data) => {
+          data.map((user) => {
+            if (user.rol == "usuario") {
+              this.usuarios.push({ id: user.id, name: user.name });
+            }
+          });
+        });
+    },
   },
   props: {
     text: String,
@@ -358,12 +383,19 @@ export default {
     descripcionTarea: String,
     EditarTarea: Boolean,
     BorrarTarea: Boolean,
+    responsable: Number,
     id: Number,
     id_tarea: Number,
     color: {
       typeof: String,
       required: true,
     },
+  },
+  mounted() {
+    let user_fetch = JSON.parse(localStorage.getItem("usuario"));
+    if (user_fetch.rol !== "administrador") {
+      this.show = false;
+    }
   },
 };
 </script>

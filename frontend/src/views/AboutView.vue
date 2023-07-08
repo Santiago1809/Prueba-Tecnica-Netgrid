@@ -109,7 +109,7 @@
             :fecha_fin="grupo.fecha_fin"
           />
         </div>
-        <CardInput @grupo-agregado="agregarGrupo" />
+        <CardInput @grupo-agregado="agregarGrupo" v-show="showAddForm"/>
       </div>
     </div>
   </section>
@@ -130,6 +130,7 @@ export default {
       filtroFechaInicio: "",
       filtroFechaFin: "",
       showDropdown: false,
+      showAddForm: true,
     };
   },
   components: {
@@ -140,11 +141,16 @@ export default {
   mounted() {
     this.getGroups();
     document.title = "Grupos";
+    let usuario = JSON.parse(localStorage.getItem("usuario"));
+    if(usuario.rol!=='administrador'){
+      this.showAddForm = false
+    }
   },
   methods: {
     async getGroups() {
+      let id = JSON.parse(localStorage.getItem('usuario'))
       await fetch(
-        `http://localhost:8000/api/proyectos/${localStorage.getItem("usuario")}`
+        `http://localhost:8000/api/proyectos/${id.id}`
       )
         .then((response) => response.json())
         .then((data) => {

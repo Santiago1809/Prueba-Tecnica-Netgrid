@@ -13,6 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        return User::all();
     }
 
     /**
@@ -37,7 +38,6 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
-
             ]);
             return response()->json(['mensaje' => 'Usuario creado con éxito', 'usuario' => $usuario], 201);
         } catch (\Throwable $th) {

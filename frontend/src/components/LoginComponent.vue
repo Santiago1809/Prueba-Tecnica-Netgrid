@@ -133,9 +133,9 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data['mensaje']);
+          console.log(data)
           if(data['mensaje']=="Successfully logged"){
-            localStorage.setItem('usuario', data.usuario.id)
+            localStorage.setItem('usuario', JSON.stringify({id:data.usuario.id, rol:data.usuario.rol}))
             this.$router.push('/home');
           }
         }).catch((err) => {
