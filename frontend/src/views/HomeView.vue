@@ -1,13 +1,12 @@
 <template>
-  <LoginComponentVue/>
+  <LoginComponent />
 </template>
-
 <script>
-import LoginComponentVue from '../components/LoginComponent.vue'
+import LoginComponent from '@/components/LoginComponent.vue';
 export default {
-  name: 'HomeView',
+  name: 'Home',
   components: {
-    LoginComponentVue
+    LoginComponent
   }
 }
 </script>

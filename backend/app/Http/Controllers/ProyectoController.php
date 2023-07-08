@@ -8,11 +8,31 @@ use Illuminate\Http\Request;
 
 class ProyectoController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(int $idUsuario)
+    {
+        try {
+            $proyectos = Proyecto::where('idUsuario', $idUsuario)->get();
+
+            $proyectosConTareas = $proyectos->map(function ($proyecto) {
+                $proyecto->cantidadTareas = $proyecto->tareas->count();
+                return $proyecto;
+            });
+
+            return response()->json($proyectosConTareas, 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created resource in storage.
      */
-    public function create(Request $request): JsonResponse
+    public function store(Request $request)
     {
         try {
             $request->validate([
@@ -41,18 +61,24 @@ class ProyectoController extends Controller
     }
 
     /**
-     * La función actualiza un proyecto con los datos proporcionados o conserva los datos existentes si
-     * no se proporcionan datos nuevos.
-     * @param Request request El parámetro  es una instancia de la clase Request, que representa
-     * una solicitud HTTP. Contiene información sobre la solicitud, como el método de solicitud, los
-     * encabezados y los datos de entrada.
-     * @param id El parámetro `id` es el identificador del proyecto que necesita ser actualizado. Se
-     * utiliza para encontrar el proyecto en la base de datos y actualizar sus detalles.
-     * @return JsonResponse una respuesta JSON. Si la actualización es exitosa, devuelve una respuesta
-     * JSON con un mensaje de éxito y los datos del proyecto actualizados. Si hay un error, devuelve una
-     * respuesta JSON con un mensaje de error.
+     * Display the specified resource.
      */
-    public function update(Request $request, $id): JsonResponse
+    public function show(int $id)
+    {
+        try {
+            $proyecto = Proyecto::with('tareas')->findOrFail($id);
+            return response()->json($proyecto, 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, int  $id)
     {
         try {
             $request->validate([
@@ -80,38 +106,11 @@ class ProyectoController extends Controller
             ], 500);
         }
     }
-    /**
-     * La función recupera proyectos asociados con un usuario y los devuelve junto con la cantidad de
-     * tareas para cada proyecto en formato JSON.
-     * @param int idUsuario El parámetro `idUsuario` es un número entero que representa el ID de un
-     * usuario.
-     * @return JsonResponse una respuesta Json.
-     */
-    public function get(int $idUsuario): JsonResponse
-    {
-        try {
-            $proyectos = Proyecto::where('idUsuario', $idUsuario)->get();
 
-            $proyectosConTareas = $proyectos->map(function ($proyecto) {
-                $proyecto->cantidadTareas = $proyecto->tareas->count();
-                return $proyecto;
-            });
-
-            return response()->json($proyectosConTareas, 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
     /**
-     * La función elimina un proyecto con la ID dada y devuelve una respuesta JSON con un mensaje de
-     * éxito o un mensaje de error si ocurre una excepción. 
-     * @param int id El parámetro "id" es un número entero que representa el identificador único del
-     * proyecto que debe eliminarse.
-     * @return JsonResponse una respuesta Json.
+     * Remove the specified resource from storage.
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id)
     {
         try {
             $proyecto = Proyecto::findOrFail($id);
@@ -123,17 +122,6 @@ class ProyectoController extends Controller
             return response()->json([
                 'message' => $th->getMessage()
             ], 500);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
-    public function getOne(int $id): JsonResponse
-    {
-        try {
-            $proyecto = Proyecto::with('tareas')->findOrFail($id);
-            return response()->json($proyecto, 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage()

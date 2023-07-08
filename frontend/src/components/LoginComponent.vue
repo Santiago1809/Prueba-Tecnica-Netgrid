@@ -1,6 +1,5 @@
 <template>
   <section class="h-screen">
-    <LogoutButton />
     <div class="h-full flex">
       <!-- Left column container with background -->
       <div class="w-full lg:w-6/12 xl:w-6/12 bg-slate-600">
@@ -108,47 +107,80 @@
 </template>
 <script>
 export default {
+  name: "Login",
   data() {
     return {
-      nombre: "",
       correo: "",
       contraseña: "",
+      nombre: "",
       registro: false,
-      token: String,
     };
   },
-  mounted() {
-    this.getToken();
+  watch: {
+    registro(newRegistro) {
+      this.getTitle();
+    },
   },
   methods: {
-    registroForm(e) {
-      e.preventDefault();
-      this.registro = true;
-    },
-    loguinForm(e) {
-      e.preventDefault();
-      this.registro = false;
-    },
-    registerForm(e) {
-      e.preventDefault();
-      this.registro = false;
-      this.$store.dispatch("register", {
-        nombre: this.nombre,
-        correo: this.correo,
-        contraseña: this.contraseña,
-      });
-    },
-    getToken() {
-      fetch("http://127.0.0.1:8000/csrf-token")
+    loguinForm() {
+      fetch('http://localhost:8000/api/users', {
+        method: "POST",
+        body: JSON.stringify({
+          email: this.correo,
+          password: this.contraseña,
+        }),
+        headers: { "Content-Type": "application/json" },
+      })
         .then((response) => response.json())
         .then((data) => {
-          this.token = data.csrf_token
-          localStorage.setItem("csrf_token", this.token)
+          console.log(data['mensaje']);
+          if(data['mensaje']=="Successfully logged"){
+            localStorage.setItem('usuario', data.usuario.id)
+            this.$router.push('/home');
+          }
+        }).catch((err) => {
+            console.log(err)
+        })
+    },
+    registerForm() {
+        let data = JSON.stringify({
+          name: this.nombre,
+          email: this.correo,
+          password: this.contraseña,
+        })
+      fetch("http://localhost:8000/api/users/register", {
+        method: "POST",
+        body: data,
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Error en la solicitud");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if(data.mensaje=='Usuario creado con éxito'){
+            localStorage.setItem('usuario', data.usuario.id);
+            this.$router.push('/home')
+          }
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     },
+    getTitle() {
+      document.title = this.registro ? "Registro" : "Inicio de sesión";
+    },
+    lookSesionActive() {
+      if (localStorage.getItem("usuario")) {
+        this.$router.push("/index");
+      }
+    },
+  },
+  mounted() {
+    this.getTitle();
+    this.lookSesionActive();
   },
 };
 </script>
