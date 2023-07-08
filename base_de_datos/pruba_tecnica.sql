@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 08-07-2023 a las 07:52:16
+-- Tiempo de generación: 08-07-2023 a las 14:10:02
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.2.8
 
@@ -20,77 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `pruba_tecnica`
 --
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `failed_jobs`
---
-
-CREATE TABLE `failed_jobs` (
-  `id` bigint UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `migrations`
---
-
-CREATE TABLE `migrations` (
-  `id` int UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `migrations`
---
-
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_12_000000_create_users_table', 1),
-(2, '2014_10_12_100000_create_password_reset_tokens_table', 1),
-(3, '2019_08_19_000000_create_failed_jobs_table', 1),
-(4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(5, '2023_07_07_181455_create_proyectos_table', 1),
-(6, '2023_07_07_181457_create_tareas_table', 1);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `password_reset_tokens`
---
-
-CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `personal_access_tokens`
---
-
-CREATE TABLE `personal_access_tokens` (
-  `id` bigint UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tokenable_id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci,
-  `last_used_at` timestamp NULL DEFAULT NULL,
-  `expires_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -114,9 +43,7 @@ CREATE TABLE `proyectos` (
 --
 
 INSERT INTO `proyectos` (`id`, `titulo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `idUsuario`, `created_at`, `updated_at`) VALUES
-(3, 'NetGrid', 'Aqui estarán todas las tareas relacionadas a la empresa', '2023-07-08', '2023-07-11', 1, '2023-07-08 07:42:38', '2023-07-08 07:42:38'),
-(4, 'Sena', 'todo lo relacionado a mi formación', '2023-07-11', '2024-09-19', 1, '2023-07-08 07:43:44', '2023-07-08 07:43:44'),
-(5, 'Partidos', 'todo lo relacionado al futbol', '2023-07-08', '2023-07-31', 5, '2023-07-08 12:39:32', '2023-07-08 12:39:32');
+(1, 'Mi segundo proyecto', 'A continuación rectificaremos si solo se llenan los campos enviados', '2023-07-06', '2023-07-06', 2, '2023-07-08 13:58:12', '2023-07-08 14:11:18');
 
 -- --------------------------------------------------------
 
@@ -130,6 +57,7 @@ CREATE TABLE `tareas` (
   `descripcion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `estado` enum('pendiente','en progreso','completada') COLLATE utf8mb4_unicode_ci NOT NULL,
   `idProyecto` bigint UNSIGNED NOT NULL,
+  `responsable` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -138,10 +66,9 @@ CREATE TABLE `tareas` (
 -- Volcado de datos para la tabla `tareas`
 --
 
-INSERT INTO `tareas` (`id`, `titulo`, `descripcion`, `estado`, `idProyecto`, `created_at`, `updated_at`) VALUES
-(3, 'Prueba de actualización', 'Esta es para verificar la creación de tareas, además para posteriormente ser eliminado', 'pendiente', 3, '2023-07-08 09:57:26', '2023-07-08 12:47:10'),
-(5, 'Sacar el certificado', 'entrar a senasofiaplus.com', 'completada', 4, '2023-07-08 11:20:02', '2023-07-08 11:22:26'),
-(7, 'Ir a los entrenamientos', 'si no no juego sjssj', 'pendiente', 5, '2023-07-08 12:39:49', '2023-07-08 12:39:49');
+INSERT INTO `tareas` (`id`, `titulo`, `descripcion`, `estado`, `idProyecto`, `responsable`, `created_at`, `updated_at`) VALUES
+(1, 'Mi segunda tarea', 'Esta es para verificar la edicion de tareas', 'en progreso', 1, 4, '2023-07-08 14:02:13', '2023-07-08 19:03:58'),
+(2, 'Tercer tarea', 'probando asignación', 'pendiente', 1, 3, '2023-07-08 14:52:01', '2023-07-08 19:07:20');
 
 -- --------------------------------------------------------
 
@@ -154,6 +81,7 @@ CREATE TABLE `users` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
+  `rol` enum('usuario','administrador') COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -164,43 +92,14 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Carlos Mario', 'carlosmario201@gmail.com', NULL, '$2y$10$W8EkU/vI2LXh.qEnatWnpOoat1kpuCvBgPDK38WIhIMepCIEuJqfi', NULL, '2023-07-07 23:42:36', '2023-07-07 23:42:36'),
-(2, 'Santiago Aristizabal', 'aristizabalsantiago482@gmail.com', NULL, '$2y$10$mL3ycwhAlgJs/prydCoiReZammm.uKYbbWGQvoVC3PA7e3j6Fuzwy', NULL, '2023-07-07 23:43:23', '2023-07-07 23:43:23'),
-(4, 'Prueba', 'prueba@prueba.com', NULL, '$2y$10$xE.5jkdIqZHO1ztZphgCNONVjqdq4hJ3zoNPvlKcUyqpcCeZsjfAS', NULL, '2023-07-08 06:50:30', '2023-07-08 06:50:30'),
-(5, 'Eiden', 'eidenperea@gmail.com', NULL, '$2y$10$uHLRCUupSiD3UyF8D3ekQug41XHUKAa/t51Dj0bLmi/GotbQQdhda', NULL, '2023-07-08 12:36:03', '2023-07-08 12:36:03'),
-(6, 'Usuario prueba', 'prueba@gmail.com', NULL, '$2y$10$sJF4dn5VCXmQW3ah6MaOiORk5mzxOKjrWqBi8z6mAhvaI9n8LzS0S', NULL, '2023-07-08 12:49:07', '2023-07-08 12:49:07');
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `rol`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(2, 'Santiago Aristizabal', 'aristizabalsantiago482@gmail.com', NULL, 'administrador', '$2y$10$Y9eyNwSY4BGKkuhHMDkNNuBguuUfwa1gJEY2vLgSlhI6kL0jocfFK', NULL, '2023-07-08 13:40:01', '2023-07-08 13:40:01'),
+(3, 'Eiden Perea', 'eidenperea505@gmail.com', NULL, 'usuario', '$2y$10$rh0qp2QeKK8y8lztGODjVOvTYNeBTGyO9XtLNV8seJvPUTU.yReGO', NULL, '2023-07-08 13:41:33', '2023-07-08 13:41:33'),
+(4, 'Carlos Aristizabal', 'carlosmario201@gmail.com', NULL, 'usuario', '$2y$10$EAWBw47Lg9bGrJDvR9RtJemWYbhsFzvZgIAa3w22fQP0KzKKNSGDW', NULL, '2023-07-08 14:56:49', '2023-07-08 14:56:49');
 
 --
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
-
---
--- Indices de la tabla `migrations`
---
-ALTER TABLE `migrations`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `password_reset_tokens`
---
-ALTER TABLE `password_reset_tokens`
-  ADD PRIMARY KEY (`email`);
-
---
--- Indices de la tabla `personal_access_tokens`
---
-ALTER TABLE `personal_access_tokens`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
-  ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
 -- Indices de la tabla `proyectos`
@@ -214,7 +113,8 @@ ALTER TABLE `proyectos`
 --
 ALTER TABLE `tareas`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `tareas_idproyecto_foreign` (`idProyecto`);
+  ADD KEY `tareas_idproyecto_foreign` (`idProyecto`),
+  ADD KEY `tareas_responsable_foreign` (`responsable`);
 
 --
 -- Indices de la tabla `users`
@@ -228,40 +128,22 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT de la tabla `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `migrations`
---
-ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT de la tabla `personal_access_tokens`
---
-ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tareas`
 --
 ALTER TABLE `tareas`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -277,7 +159,8 @@ ALTER TABLE `proyectos`
 -- Filtros para la tabla `tareas`
 --
 ALTER TABLE `tareas`
-  ADD CONSTRAINT `tareas_idproyecto_foreign` FOREIGN KEY (`idProyecto`) REFERENCES `proyectos` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `tareas_idproyecto_foreign` FOREIGN KEY (`idProyecto`) REFERENCES `proyectos` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `tareas_responsable_foreign` FOREIGN KEY (`responsable`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
