@@ -342,7 +342,8 @@ export default {
         method: "DELETE",
       })
         .then((response) => response.json())
-        .then(() => {
+        .then((data) => {
+          console.log(data)
           this.openModal = false;
           window.location.reload();
         });

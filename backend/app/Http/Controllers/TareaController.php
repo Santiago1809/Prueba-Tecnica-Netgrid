@@ -127,15 +127,10 @@ class TareaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id, Request $request)
+    public function destroy(int $id)
     {
         try {
-            $user = User::findOrFail($request->idUsuario);
-            if ($user->rol!== 'administrador') {
-                return response()->json([
-                   'message' => 'No tienes permiso para eliminar una tarea'
-                ], 403);
-            }
+
             $tarea = Tarea::findOrFail($id);
             $tarea->delete();
             return response()->json([

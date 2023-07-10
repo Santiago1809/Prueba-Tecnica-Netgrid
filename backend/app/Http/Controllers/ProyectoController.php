@@ -54,13 +54,6 @@ class ProyectoController extends Controller
                 'fecha_inicio' => 'required|date',
                 'fecha_fin' => 'required|date',
             ]);
-            $user = User::findOrFail($request->idUsuario);
-
-            if ($user->rol !== 'administrador') {
-                return response()->json([
-                    'message' => 'No tienes permiso para crear un proyecto'
-                ], 403);
-            }
 
             Proyecto::create([
                 'idUsuario' => $request->idUsuario,
@@ -147,28 +140,11 @@ class ProyectoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, int $id)
+    public function destroy( int $id)
     {
         try {
-            $user = User::findOrFail($request->idUsuario);
-
-            $request->validate([
-                'idUsuario' => 'required|integer|exists:users,id',
-            ]);
-
-            if ($user->rol !== 'administrador') {
-                return response()->json([
-                    'message' => 'No tienes permiso para eliminar este proyecto'
-                ], 403);
-            }
 
             $proyecto = Proyecto::findOrFail($id);
-
-            if ($proyecto->idUsuario !== $request->input('idUsuario')) {
-                return response()->json([
-                    'message' => 'No tienes permiso para eliminar este proyecto'
-                ], 403);
-            }
 
             $proyecto->delete();
 

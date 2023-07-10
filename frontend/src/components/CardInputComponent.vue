@@ -65,19 +65,22 @@ export default {
   },
   methods: {
     add_grupo() {
+      let usuario = JSON.parse(localStorage.getItem("usuario"));
+      console.log(usuario)
       fetch(`http://localhost:8000/api/proyectos`, {
         method: "POST",
         body: JSON.stringify({
-          idUsuario: parseInt(localStorage.getItem("usuario")),
+          idUsuario:usuario.id,
           titulo: this.nuevo_grupo,
           descripcion: this.nueva_descripcion,
           fecha_inicio: this.fecha_inicio,
-          fecha_fin: this.fecha_fin,
+          fecha_fin: this.fecha_fin
         }),
         headers: { "Content-Type": "application/json" },
       })
         .then((response) => response.json())
-        .then(() => {
+        .then((data) => {
+          console.log(data);
           window.location.reload();
           this.nuevo_grupo = "";
         });
@@ -85,13 +88,12 @@ export default {
     getCurrentDateTime() {
       const now = new Date();
       const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hour = String(now.getHours()).padStart(2, '0');
-      const minute = String(now.getMinutes()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const hour = String(now.getHours()).padStart(2, "0");
+      const minute = String(now.getMinutes()).padStart(2, "0");
       return `${year}-${month}-${day}T${hour}:${minute}`;
-    }
-  
-  }
+    },
+  },
 };
 </script>
