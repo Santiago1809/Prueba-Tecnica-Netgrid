@@ -174,7 +174,7 @@ export default {
     },
     lookSesionActive() {
       if (localStorage.getItem("usuario")) {
-        this.$router.push("/index");
+        this.$router.push("/");
       }
     },
   },
