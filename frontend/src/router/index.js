@@ -3,11 +3,6 @@ import HomeView from '../views/HomeView.vue'
 import TareasView from '@/views/TareasView.vue'
 const routes = [
   {
-    path: '/index',
-    name: 'home',
-    component: HomeView
-  },
-  {
     path: '/',
     name: 'home',
     component: HomeView
